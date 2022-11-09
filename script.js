@@ -12,13 +12,13 @@ var ball = {
     }
 }
 
-//----end define functions----
 // the game
 function initializeGame() {
 
 }
+//----end define functions----
+
 window.game = () => {
     window.requestAnimationFrame(main);
-  
-
+        
   };
