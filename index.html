@@ -4,12 +4,15 @@
 <body>
     <canvas id="game" width="480" height="320"></canvas>
     <script>
+        console.log('Define variables')
         //global variables
 var canvas = document.getElementById('game');
 var ctx = canvas.getContext('2d');
+console.log('before keydown')
 var key = document.addEventListener('keydown');
+console.log('after keydown')
 // ----define functions----
-
+console.log('Define Functions')
 //draw
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -20,24 +23,25 @@ function draw() {
     ctx.closePath();
     x += dx;
     y += dy;
-    console.log('test')
+    console.log('inside draw function before request animation frame')
     window.requestAnimationFrame(draw)
+    console.log('inside draw function after request animation frame')
 }
-
+console.log('BALL')
 // ball
 var ball = {
     new: function ballMovement() {
         
     }   
 }
-
+console.log('initialize game func')
 // the game
 function initializeGame() {
     
 }
 //----end define functions----
-
+console.log('before request animation frame')
 window.requestAnimationFrame(draw)
-
+console.log('after request animation frame')
     </script>
 </body>
