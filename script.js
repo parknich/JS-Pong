@@ -8,7 +8,17 @@ var key = document.addEventListener('keydown');
 // ball
 var ball = {
     new: function ballMovement() {
-        
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+            x += dx;
+            y += dy;
+          }
+          
     }
 }
 
@@ -20,5 +30,6 @@ function initializeGame() {
 
 window.game = () => {
     window.requestAnimationFrame(main);
-        
+    ballMovement.draw(1,1)
+    console.log('HELP')
   };

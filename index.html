@@ -2,9 +2,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="game">
-        This content requires JavaScript enabled. Please enable JavaScript to continue.
-    </canvas>
+    <canvas id="game" width="480" height="320"></canvas>
     <script>
         //global variables
 var canvas = document.getElementById('game');
@@ -16,19 +14,28 @@ var key = document.addEventListener('keydown');
 // ball
 var ball = {
     new: function ballMovement() {
-        
+        function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+        x += dx;
+        y += dy;
+        console.log('test')
+        window.requestAnimationFrame(draw())
+    }   
     }
 }
 
 // the game
-function initializeGame() {
-
+function initializeGame(    ) {
+    
 }
 //----end define functions----
 
-window.game = () => {
-    window.requestAnimationFrame(main);
-        
-  };
+window.requestAnimationFrame(draw())
+
     </script>
 </body>
