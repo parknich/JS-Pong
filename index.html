@@ -12,6 +12,8 @@
         var dy =  2
         var x = canvas.width/2;
         var y = canvas.height-30;
+        var paddle1Y = canvas.height/2;
+        var paddle1X = 20
         console.log('before keydown')
         var key = document.addEventListener('keydown', function (event) {
             if (event.key = "W") {
@@ -27,15 +29,22 @@ console.log('after keydown')
 // ----define functions----
 console.log('Define Functions')
 //draw
-function draw() {
+function drawBall() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
-    ctx.rect(x,y,10,10)
+    ctx.rect(x,y,10,10);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
     x += dx;
     y += dy;
+}
+function drawPaddle1() {
+ctx.beginPath();
+ctx.rect(paddle1X,paddle1Y,10,75);
+ctx.fillStyle = "#000000";
+ctx.fill();
+ctx.closePath();
 }
 console.log('BALL')
 // resize canvas
@@ -44,27 +53,27 @@ function resizeCanvas() {
 }
 // ball
 function ballMovement() {
-    if (y + dy > canvas.height || y + dy < 0) {
+    if (y + dy > canvas.height - 10 || y + dy < 0) {
         dy = -dy;
     }
-    if (x + dx > canvas.width || x + dx < 0) {
+    if (x + dx > canvas.width - 10 || x + dx < 0) {
         dx = -dx;
     }
-    draw()
-    window.requestAnimationFrame(ballMovement)
+    if (x + dx < paddle1X && x + dx  y + dy < paddle1Y ) {
+        console.log('x + dx == paddle1X && y + dy == paddle1Y')
+    }
+    drawBall()
 }
 console.log('initialize game func')
 // the game
-function initializeGame() {
-    ctx.beginPath;
-    ctx.rect(1,1,10,40);
-    ctx.fill;
-    ctx.closePath;
-    
+function Game() {
+    ballMovement()
+    drawPaddle1()
+    window.requestAnimationFrame(Game)
 }
 //----end define functions----
 console.log('before request animation frame')
-window.requestAnimationFrame(ballMovement)
+Game()
 console.log('after request animation frame')
     </script>
 </body>
