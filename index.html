@@ -17,10 +17,7 @@
         var paddle2Y = canvas.height/2
         var paddle2X = canvas.width-20
         console.log('before keydown')
-        var key = document.addEventListener('keydown', function (event) {
-            return event.key;
-    }
-)
+
 console.log('after keydown')
 // ----define functions----
 console.log('Define Functions')
@@ -76,11 +73,18 @@ function paddleCollision() {
       }
     }
 function paddleMovement() {
-    if(key = 'w') {
-        paddle1Y = paddle1Y + 5
-    } else if(key = 's') {
-        paddle1Y = paddle1Y - 5
+    var keyDown = document.addEventListener('keydown', function (event) {      
+        return event.key
+        }
+    )
+    if(paddle1Y >= 0 && paddle1Y <= canvas.height) {
+        if(keyDown = 'w') {
+            paddle1Y = paddle1Y + 5
+        } else if(keyDown = 's') {
+            paddle1Y = paddle1Y - 5
+        }
     }
+    console.log(keyDown)
 }
 console.log('initialize game func')
 // the game
@@ -89,7 +93,7 @@ function Game() {
     drawPaddle1()
     drawPaddle2()
     paddleCollision()
-    paddleMovement
+    paddleMovement()
     window.requestAnimationFrame(Game)
 }
 //----end define functions----
