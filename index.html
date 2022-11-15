@@ -18,20 +18,6 @@
         var paddle2Y = canvas.height/2
         var paddle2X = canvas.width-20
         console.log('before keydown')
-        document.addEventListener('keydown', function (event) {
-            if (event.key == 'w') {
-                var keyDown = 'w'
-            } else if (event.key == 's') {
-                var keyDown = 's'
-            } else if (event.key == 'ArrowUp') {
-                var keyDown = 'ArrowUp'
-            } else if (event.key == 'ArrowDown') {
-                var keyDown = 'ArrowDown'
-            } else {
-                var keyDown = 'undefined'
-            }
-        }
-    )
 
 console.log('after keydown')
 // ----define functions----
@@ -89,19 +75,30 @@ function paddleCollision() {
       }
     }
 function paddleMovement() {
-    console.log(keyDown)
-    if(paddle1Y > 0 && paddle1Y < 480) {
-        if(keyDown == 'w') {
+        if (keyDown == 'w') {
             paddle1Y = paddle1Y + 5
             console.log(keyDown)
-        } else if(keyDown == 's') {
+        } else if (keyDown == 's') {
             paddle1Y = paddle1Y - 5
             console.log(keyDown)
         }
     }
-}
+
 console.log('initialize game func')
 // the game
+const keyDown = 'null'
+document.addEventListener('keydown', function (event) {
+            if (event.key == 'w') {
+                const keyDown = 'w'
+            } else if (event.key == 's') {
+                const keyDown = 's'
+            } else if (event.key == 'ArrowUp') {
+                const keyDown = 'ArrowUp'
+            } else if (event.key == 'ArrowDown') {
+                const keyDown = 'ArrowDown'
+            }
+        }
+    )
 function Game() {
     ballMovement()
     drawPaddle1()
