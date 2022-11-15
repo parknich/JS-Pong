@@ -73,10 +73,6 @@ function paddleCollision() {
       }
     }
 function paddleMovement() {
-    var keyDown = document.addEventListener('keydown', function (event) {      
-        return event.key
-        }
-    )
     if(paddle1Y >= 0 && paddle1Y <= canvas.height) {
         if(keyDown = 'w') {
             paddle1Y = paddle1Y + 5
@@ -89,6 +85,10 @@ function paddleMovement() {
 console.log('initialize game func')
 // the game
 function Game() {
+    var keyDown = document.addEventListener('keydown', function (event) {      
+        return event.key
+        }
+    )
     ballMovement()
     drawPaddle1()
     drawPaddle2()
