@@ -86,19 +86,12 @@ function paddleMovement() {
 
 console.log('initialize game func')
 // the game
-const keyDown = 'null'
-document.addEventListener('keydown', function (event) {
-            if (event.key == 'w') {
-                const keyDown = 'w'
-            } else if (event.key == 's') {
-                const keyDown = 's'
-            } else if (event.key == 'ArrowUp') {
-                const keyDown = 'ArrowUp'
-            } else if (event.key == 'ArrowDown') {
-                const keyDown = 'ArrowDown'
-            }
-        }
-    )
+let keyDown = null;
+document.addEventListener('keydown', (event) => {
+  if (['w', 's', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+    keyDown = event.key;
+  }
+})
 function Game() {
     ballMovement()
     drawPaddle1()
