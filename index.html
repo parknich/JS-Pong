@@ -10,13 +10,15 @@
         var canvas = document.getElementById('game');
         var ctx = canvas.getContext('2d');
         var dx = -2
-        var dy =  2
+        var dy =  3
         var x = canvas.width/2;
         var y = canvas.height-30;
         var paddle1Y = canvas.height/2;
         var paddle1X = 20
         var paddle2Y = canvas.height/2
         var paddle2X = canvas.width-20
+        let keyDown = null;
+        var isGameOver = false;
         console.log('before keydown')
 
 console.log('after keydown')
@@ -59,40 +61,63 @@ function ballMovement() {
         dy = -dy;
     }
     if (x + dx > canvas.width - 10 || x + dx < 0) {
-        dx = -dx;
+        isGameOver = true
+    } else {
+        isGameOver = false
     }
     drawBall()
 }
 function paddleCollision() {
       if (x > paddle1X && x < paddle1X + 10 && y > paddle1Y && y < paddle1Y + 75) {
         dx = -dx;
+        dy = dy * Math.random() + 1
         console.log('paddle1 collision')
         
       }
       if (x > paddle2X && x < paddle2X + 10 && y > paddle2Y && y < paddle2Y + 75) {
           dx = -dx
+          dy = dy * Math.random() + 1
           console.log('paddle2 collision')
       }
     }
 function paddleMovement() {
         if (keyDown == 'w') {
-            paddle1Y = paddle1Y + 5
+            paddle1Y = paddle1Y - 5
             console.log(keyDown)
         } else if (keyDown == 's') {
-            paddle1Y = paddle1Y - 5
+            paddle1Y = paddle1Y + 5
             console.log(keyDown)
         }
     }
-
+function gameOver() {
+    if(isGameOver == true) {
+        console.log('game over ack')
+        ctx.beginPath()
+        ctx.strokeText('game over', canvas.width/2, canvas.height/2)
+        ctx.fillStyle = "#000000"
+        ctx.fill()
+        ctx.closePath()
+    }
+}
 console.log('initialize game func')
 // the game
-let keyDown = null;
 document.addEventListener('keydown', (event) => {
   if (['w', 's', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
     keyDown = event.key;
+  } else {
+    keyDown = null;
   }
 })
+document.addEventListener('keyup', (event) => {
+    keyDown = null;
+})
 function Game() {
+    ctx.beginPath
+    ctx.rect(canvas.width/2, canvas.height/2, canvas.width, canvas.height)
+    ctx.fillStyle = "#808080"
+    ctx.fill()
+    ctx.closePath()
+    gameOver()
     ballMovement()
     drawPaddle1()
     drawPaddle2()
