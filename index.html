@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <head>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,8 +18,18 @@
         var paddle2Y = canvas.height/2
         var paddle2X = canvas.width-20
         console.log('before keydown')
-        var keyDown = document.addEventListener('keydown', function (event) {      
-        return event.key
+        document.addEventListener('keydown', function (event) {
+            if (event.key = 'w') {
+
+            } else if (event.key = 's') {
+
+            } else if (event.key = '') {
+
+            } else if (event.key = '') {
+
+            } else {
+                var keyDown = 'undefined'
+            }
         }
     )
 
@@ -69,19 +80,23 @@ function ballMovement() {
 function paddleCollision() {
       if (x > paddle1X && x < paddle1X + 10 && y > paddle1Y && y < paddle1Y + 75) {
         dx = -dx;
-        console.log('collision')
+        console.log('paddle1 collision')
         
       }
       if (x > paddle2X && x < paddle2X + 10 && y > paddle2Y && y < paddle2Y + 75) {
-        dx = -dx
+          dx = -dx
+          console.log('paddle2 collision')
       }
     }
 function paddleMovement() {
-    if(paddle1Y >= 0 && paddle1Y <= canvas.height) {
+    console.log(keyDown)
+    if(paddle1Y > 0 && paddle1Y < 480) {
         if(keyDown == 'w') {
             paddle1Y = paddle1Y + 5
-        } else if(keyDown = 's') {
-            paddle1Y == paddle1Y - 5
+            console.log(keyDown)
+        } else if(keyDown == 's') {
+            paddle1Y = paddle1Y - 5
+            console.log(keyDown)
         }
     }
 }
