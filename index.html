@@ -8,8 +8,8 @@
         //global variables
         var canvas = document.getElementById('game');
         var ctx = canvas.getContext('2d');
-        var dx = -1
-        var dy =  1
+        var dx = -2
+        var dy =  2
         var x = canvas.width/2;
         var y = canvas.height-30;
         var paddle1Y = canvas.height/2;
@@ -60,16 +60,22 @@ function ballMovement() {
     if (x + dx > canvas.width - 10 || x + dx < 0) {
         dx = -dx;
     }
-    if (x + dx < paddle1X + 10 && x + dx > paddle1X - 10 && y + dy < paddle1Y - 75 && y + dy > paddle1Y + 75) {
-        console.log('ball collided with paddle1')
-    }
     drawBall()
 }
+function paddleCollision() {
+      if (x > paddle1X && x < paddle1X + 10 && y > paddle1Y && y < paddle1Y + 75) {
+        dy = -dy;
+        console.log('collision')
+        
+      }
+    }
+
 console.log('initialize game func')
 // the game
 function Game() {
     ballMovement()
     drawPaddle1()
+    paddleCollision()
     window.requestAnimationFrame(Game)
 }
 //----end define functions----
