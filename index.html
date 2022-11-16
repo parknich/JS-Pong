@@ -1,173 +1,193 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <head>
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <canvas id="game" width="480" height="320" style="z-index: 0;">
-    </canvas>
-    <script>
-        console.log('Define variables')
-        //global variables
-        var gameBG = document.getElementById('gameBackground');
-        var bgctx = gameBG.getContext('2d');
-        var canvas = document.getElementById('game');
-        var ctx = canvas.getContext('2d');
-        var dx = -3
-        var dy = 3
-        const basedy = 3
-        var x = canvas.width/2;
-        var y = canvas.height-30;
-        var paddle1Y = canvas.height/2;
-        var paddle1X = 20
-        var paddle2Y = canvas.height/2;
-        var paddle2X = 450
-        let keyDown = null;
-        var gameStatus = 'MainMenu'
-        var isGameOver = false;
-        var newDiv = document.createElement("div");
-        console.log('before keydown')
+  <canvas id="game" width="480" height="320" style="z-index: 0"> </canvas>
+  <script>
+    console.log("Define variables");
+    //global variables
+    var canvas = document.getElementById("game");
+    var ctx = canvas.getContext("2d");
+    var dx = -3;
+    var dy = 3;
+    const basedy = 3;
+    var x = canvas.width / 2;
+    var y = canvas.height - 30;
+    var paddle1Y = canvas.height / 2;
+    var paddle1X = 20;
+    var paddle2Y = canvas.height / 2;
+    var paddle2X = 450;
+    let keyDown = null;
+    var gameStatus = "MainMenu";
+    var isGameOver = false;
+    var newDiv = document.createElement("div");
+    var mouseX = null;
+    var mouseY = null;
+    console.log("before keydown");
 
-console.log('after keydown')
-// ----define functions----
-        console.log('Define Functions')
+    console.log("after keydown");
+    // ----define functions----
+    console.log("Define Functions");
 
-function disableScroll() {
-    document.body.classList.add("stop-scrolling");
-}
-  
-function enableScroll() {
-    document.body.classList.remove("stop-scrolling");
-}
-//draw
-function drawBall() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.rect(x,y,10,10);
-    ctx.fillStyle = "#000000";
-    ctx.font = "15px Courier New"
-    ctx.fillText(`Ball X: ${x} Ball Y: ${y}`, 10, 20);
-    ctx.fill();
-    ctx.closePath();
-    x += dx;
-    y += dy;
-}
-function drawPaddle1() {
-ctx.beginPath();
-ctx.rect(paddle1X,paddle1Y,10,75);
-ctx.fillStyle = "#000000";
-ctx.fill();
-ctx.closePath();
-}
-function drawPaddle2() {
-ctx.beginPath();
-ctx.rect(paddle2X,paddle2Y,10,75);
-ctx.fillStyle = "#000000";
-ctx.fill();
-ctx.closePath();
-}
-console.log('BALL')
-// resize canvas
-function resizeCanvas() {
+    function disableScroll() {
+      document.body.classList.add("stop-scrolling");
+    }
 
-}
-// ball
-function ballMovement() {
-    if (y + dy > canvas.height - 10 || y + dy < 0) {
+    function enableScroll() {
+      document.body.classList.remove("stop-scrolling");
+    }
+    //draw
+    function drawBall() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.rect(x, y, 10, 10);
+      ctx.fillStyle = "#000000";
+      ctx.font = "15px Courier New";
+      ctx.fillText(`Ball X: ${x} Ball Y: ${y}`, 10, 20);
+      ctx.fill();
+      ctx.closePath();
+      x += dx;
+      y += dy;
+    }
+    function drawPaddle1() {
+      ctx.beginPath();
+      ctx.rect(paddle1X, paddle1Y, 10, 75);
+      ctx.fillStyle = "#000000";
+      ctx.fill();
+      ctx.closePath();
+    }
+    function drawPaddle2() {
+      ctx.beginPath();
+      ctx.rect(paddle2X, paddle2Y, 10, 75);
+      ctx.fillStyle = "#000000";
+      ctx.fill();
+      ctx.closePath();
+    }
+    console.log("BALL");
+    // resize canvas
+    function resizeCanvas() {}
+    // ball
+    function ballMovement() {
+      if (y + dy > canvas.height - 10 || y + dy < 0) {
         dy = -dy;
+      }
+      if (x + dx > canvas.width - 10 || x + dx < 0) {
+        gameStatus = "gameOver";
+      }
+      drawBall();
     }
-    if (x + dx > canvas.width - 10 || x + dx < 0) {
-        gameStatus = 'gameOver'
-    }
-    drawBall()
-}
-function paddleCollision() {
-      if (x > paddle1X && x < paddle1X + 10 && y > paddle1Y && y < paddle1Y + 75) {
+    function paddleCollision() {
+      if (
+        x > paddle1X &&
+        x < paddle1X + 10 &&
+        y > paddle1Y &&
+        y < paddle1Y + 75
+      ) {
         dx = -dx;
-        dy = basedy * (Math.random())
-        console.log('paddle1 collision')
-        
+        dy = basedy * Math.random();
+        console.log("paddle1 collision");
       }
-      if (x < paddle2X && x > paddle2X - 10 && y > paddle2Y && y < paddle2Y + 75) {
-          dx = -dx
-          dy = basedy * (Math.random())
-          console.log('paddle2 collision')
+      if (
+        x < paddle2X &&
+        x > paddle2X - 10 &&
+        y > paddle2Y &&
+        y < paddle2Y + 75
+      ) {
+        dx = -dx;
+        dy = basedy * Math.random();
+        console.log("paddle2 collision");
       }
     }
-function paddleMovement() {
-        if (keyDown == 'w') {
-            paddle1Y = paddle1Y - 5
-            console.log(keyDown)
-        } else if (keyDown == 's') {
-            paddle1Y = paddle1Y + 5
-            console.log(keyDown)
-        } else if (keyDown == 'ArrowUp') {
-            paddle2Y = paddle2Y - 5
-            console.log(keyDown)
-        } else if (keyDown == 'ArrowDown') {
-            paddle2Y = paddle2Y + 5
-        }
+    function paddleMovement() {
+      if (keyDown == "w") {
+        paddle1Y = paddle1Y - 5;
+        console.log(keyDown);
+      } else if (keyDown == "s") {
+        paddle1Y = paddle1Y + 5;
+        console.log(keyDown);
+      } else if (keyDown == "ArrowUp") {
+        paddle2Y = paddle2Y - 5;
+        console.log(keyDown);
+      } else if (keyDown == "ArrowDown") {
+        paddle2Y = paddle2Y + 5;
+      }
     }
-function gameOver() {
-    if(gameStatus == 'gameOver') {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.beginPath()
-        ctx.font = "40px Courier New"
-        ctx.fillStyle = "#000000"
-        ctx.fillText('Game Over', 130, canvas.height/2)
-        ctx.fill()
-        ctx.closePath()
+    function gameOver() {
+      if (gameStatus == "gameOver") {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.font = "40px Courier New";
+        ctx.fillStyle = "#000000";
+        ctx.fillText("Game Over", 130, canvas.height / 2);
+        ctx.fill();
+        ctx.closePath();
+      }
     }
-}
-function drawBackground() {
-    ctx.globalCompositeOperation = 'destination-over';
-    ctx.beginPath()
-    ctx.rect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = "#808080"
-    ctx.fill()
-    ctx.closePath()
-}
-        function mainmenu() {
-            if (gameStatus == 'MainMenu') {
-                ctx.beginPath()
-                ctx.fillStyle = "#000000"
-                ctx.fillRect(165, canvas.height/2, 140, 40)
-                ctx.fillStyle = "#808080"
-                ctx.font = '20px Courier New'
-                ctx.fillText('2 Players', 180, 185)
-                ctx.closePath()
+    function drawBackground() {
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.beginPath();
+      ctx.rect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#808080";
+      ctx.fill();
+      ctx.closePath();
+    }
+    function mainmenu() {
+      if (gameStatus == "MainMenu") {
+        ctx.beginPath();
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(165, canvas.height / 2, 140, 40);
+        ctx.fillStyle = "#808080";
+        ctx.font = "20px Courier New";
+        ctx.fillText("2 Players", 180, 185);
+        ctx.closePath();
+      }
+    }
+    console.log("initialize game func");
+    // the game
+    document.addEventListener("keydown", (event) => {
+      if (["w", "s", "ArrowUp", "ArrowDown"].includes(event.key)) {
+        keyDown = event.key;
+      } else {
+        keyDown = null;
+      }
+    });
+    document.addEventListener("keyup", (event) => {
+      keyDown = null;
+    });
 
-            }
-        }
-console.log('initialize game func')
-// the game
-document.addEventListener('keydown', (event) => {
-  if (['w', 's', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-    keyDown = event.key;
-  } else {
-    keyDown = null;
-  }
-})
-document.addEventListener('keyup', (event) => {
-    keyDown = null;
-})
-
-function Game() {
-    disableScroll()
-    mainmenu()
-    if(gameStatus == 'Active') {ballMovement();}
-    gameOver()
-    if(gameStatus == 'Active') {
-        drawPaddle1()
-        drawPaddle2()
-        paddleCollision()
-        paddleMovement()
+    function getCursorPosition(canvas, event) {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = event.clientX - rect.left;
+      mouseY = event.clientY - rect.top;
+      console.log(`mouseX: ${mouseX} mouseY: ${mouseY}`);
     }
-    drawBackground()
-    window.requestAnimationFrame(Game)
-}
-//----end define functions----
-console.log('before request animation frame')
-Game()
-console.log('after request animation frame')
-    </script>
+    canvas.addEventListener("onMouseDown", (event) => {
+      getCursorPosition();
+      if (mouseX > 165 && mouseX < canvas.height / 2) {
+        gameStatus = "Active";
+      }
+      return;
+    });
+    function Game() {
+      disableScroll();
+      mainmenu();
+      if (gameStatus == "Active") {
+        ballMovement();
+      }
+      gameOver();
+      if (gameStatus == "Active") {
+        drawPaddle1();
+        drawPaddle2();
+        paddleCollision();
+        paddleMovement();
+      }
+      drawBackground();
+      window.requestAnimationFrame(Game);
+    }
+    //----end define functions----
+    console.log("before request animation frame");
+    Game();
+    console.log("after request animation frame");
+  </script>
 </body>
