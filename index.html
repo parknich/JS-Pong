@@ -3,8 +3,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="game" width="480" height="320" style="z-index: 0;"></canvas>
-    <canvas id="gameBackground" width="480" height="320" style="z-index: 1;"></canvas>
+    <canvas id="game" width="480" height="320" style="z-index: 0;">
+    </canvas>
     <script>
         console.log('Define variables')
         //global variables
@@ -22,14 +22,15 @@
         var paddle2Y = canvas.height/2;
         var paddle2X = 450
         let keyDown = null;
-        var gameStatus = 'Active'
+        var gameStatus = 'MainMenu'
         var isGameOver = false;
         var newDiv = document.createElement("div");
         console.log('before keydown')
 
 console.log('after keydown')
 // ----define functions----
-console.log('Define Functions')
+        console.log('Define Functions')
+
 function disableScroll() {
     document.body.classList.add("stop-scrolling");
 }
@@ -125,6 +126,18 @@ function drawBackground() {
     ctx.fill()
     ctx.closePath()
 }
+        function mainmenu() {
+            if (gameStatus == 'MainMenu') {
+                ctx.beginPath()
+                ctx.fillStyle = "#000000"
+                ctx.fillRect(165, canvas.height/2, 140, 40)
+                ctx.fillStyle = "#808080"
+                ctx.font = '20px Courier New'
+                ctx.fillText('2 Players', 180, 185)
+                ctx.closePath()
+
+            }
+        }
 console.log('initialize game func')
 // the game
 document.addEventListener('keydown', (event) => {
@@ -140,6 +153,7 @@ document.addEventListener('keyup', (event) => {
 
 function Game() {
     disableScroll()
+    mainmenu()
     if(gameStatus == 'Active') {ballMovement();}
     gameOver()
     if(gameStatus == 'Active') {
