@@ -95,8 +95,8 @@ function paddleMovement() {
         }
     }
 function gameOver() {
+    console.log(`isGameOver = ${isGameOver}` )
     if(isGameOver == true) {
-        console.log('game over ack')
         ctx.beginPath()
         ctx.strokeText('game over', canvas.width/2, canvas.height/2)
         ctx.fillStyle = "#000000"
