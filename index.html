@@ -12,8 +12,9 @@
         var bgctx = gameBG.getContext('2d');
         var canvas = document.getElementById('game');
         var ctx = canvas.getContext('2d');
-        var dx = -2
-        var dy =  3
+        var dx = -3
+        var dy = 3
+        const basedy = 3
         var x = canvas.width/2;
         var y = canvas.height-30;
         var paddle1Y = canvas.height/2;
@@ -81,13 +82,13 @@ function ballMovement() {
 function paddleCollision() {
       if (x > paddle1X && x < paddle1X + 10 && y > paddle1Y && y < paddle1Y + 75) {
         dx = -dx;
-        dy = (dy)* (Math.random()) 
+        dy = basedy * (Math.random())
         console.log('paddle1 collision')
         
       }
       if (x < paddle2X && x > paddle2X - 10 && y > paddle2Y && y < paddle2Y + 75) {
           dx = -dx
-          dy = (dy)* (Math.random())
+          dy = basedy * (Math.random())
           console.log('paddle2 collision')
       }
     }
