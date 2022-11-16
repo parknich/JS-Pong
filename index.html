@@ -87,6 +87,11 @@ function paddleMovement() {
         } else if (keyDown == 's') {
             paddle1Y = paddle1Y + 5
             console.log(keyDown)
+        } else if (keyDown == 'ArrowUp') {
+            paddle2Y = paddle2Y - 5
+            console.log(keyDown)
+        } else if (keyDown == 'ArrowDown') {
+            paddle2Y = paddle2Y + 5
         }
     }
 function gameOver() {
@@ -112,7 +117,7 @@ document.addEventListener('keyup', (event) => {
     keyDown = null;
 })
 function Game() {
-    ctx.beginPath
+    ctx.beginPath()
     ctx.rect(canvas.width/2, canvas.height/2, canvas.width, canvas.height)
     ctx.fillStyle = "#808080"
     ctx.fill()
