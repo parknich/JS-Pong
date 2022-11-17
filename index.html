@@ -162,12 +162,10 @@
       mouseY = event.clientY - rect.top;
       console.log(`mouseX: ${mouseX} mouseY: ${mouseY}`);
     }
-    canvas.addEventListener("onMouseDown", (event) => {
-      getCursorPosition();
-      if (mouseX > 165 && mouseX < canvas.height / 2) {
+    canvas.addEventListener("click", ({ offsetX, offsetY }) => {
+        if (ctx.isPointInPath(rect, offsetX, offsetY)) {
         gameStatus = "Active";
-      }
-      return;
+    }
     });
     function Game() {
       disableScroll();
