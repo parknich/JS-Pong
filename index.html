@@ -152,9 +152,7 @@
         keyDown = null;
       }
     });
-    document.addEventListener("keyup", (event) => {
-      keyDown = null;
-    });
+    document.addEventListener("keyup", (event) => {keyDown = null;});
 
     function getCursorPosition(canvas, event) {
       const bounds = canvas.getBoundingClientRect();
@@ -162,11 +160,11 @@
       mouseY = event.clientY - bounds.top;
       console.log(`mouseX: ${mouseX} mouseY: ${mouseY}`);
     }
-    canvas.addEventListener("click", ({ offsetX, offsetY }) => {
-        if (ctx.isPointInPath(rect, offsetX, offsetY)) {
+    canvas.addEventListener("click", ({ mouseX, mouseY }) => {
+        if (ctx.isPointInPath(rect, mouseX, mouseY)) {
         gameStatus = "Active";
-    }
-    });
+    }});
+    document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
     function Game() {
       disableScroll();
       if (gameStatus == "Active") {
