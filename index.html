@@ -24,6 +24,7 @@
     let newDiv = document.createElement("div");
     let mouseX = null;
     let mouseY = null;
+    let rect = null
     console.log("before keydown");
 
     console.log("after keydown");
@@ -85,7 +86,7 @@
         y < paddle1Y + 75
       ) {
         dx = -dx;
-        dy = basedy * Math.random();
+        dy = basedy * Math.randomd();
         console.log("paddle1 collision");
       }
       if (
@@ -134,13 +135,15 @@
     }
     function mainmenu() {
       if (gameStatus == "MainMenu") {
-        ctx.beginPath();
+        const button1 = new Path2D()
+        button1
+        rect = button1
         ctx.fillStyle = "#000000";
         ctx.fillRect(165, canvas.height / 2, 140, 40);
         ctx.fillStyle = "#808080";
         ctx.font = "20px Courier New";
         ctx.fillText("2 Players", 180, 185);
-        ctx.closePath();
+        rect = null
       }
     }
     console.log("initialize game func");
