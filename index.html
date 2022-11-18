@@ -89,7 +89,7 @@
         y < paddle1Y + 75
       ) {
         dx = -dx;
-        dy = basedy * Math.randomd();
+        dy = basedy * Math.random();
         console.log("paddle1 collision");
       }
       if (
@@ -138,9 +138,16 @@
     }
     function mainmenu() {
       if (gameStatus == "mainmenu") {
-        button1.rect(165, canvas.height / 2, 140, 40);
         ctx.fillStyle = "#000000";
-        ctx.fill(button1);
+        button1.rect(165, canvas.height / 2, 140, 40);
+        ctx.fill(button1);  
+        ctx.beginPath()
+        ctx.fillStyle = "white";
+        ctx.fillText('2 Players', 165, 170, 20);
+        ctx.fill();
+        ctx.closePath()
+      } else if (gameStatus == "mainmenu, AIDifficulty") {
+        console.log('not done');
       }
     }
     console.log("initialize game func");
