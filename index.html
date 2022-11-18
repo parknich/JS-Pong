@@ -11,8 +11,8 @@
     const ctx = canvas.getContext("2d");
     let dx = -3;
     let dy = 3;
-    const basedy = 3;
-    const basedx = -3
+    let basedy = 3;
+    let basedx = -3
     let x = canvas.width / 2;
     let y = canvas.height - 30;
     let paddle1Y = canvas.height / 2;
@@ -188,9 +188,39 @@
           gameStatus = "Active";
         } else if (ctx.isPointInPath(buttonRetry, offsetX, offsetY) && gameStatus == 'gameOver') {
           console.log('buttonRetry clicked')
-          gameStatus = "Active";
           let randomStart = Math.floor(Math.random() * 4);
-          if (randomStart=)
+          x = canvas.width/2
+          y = canvas.height/2
+          switch (randomStart) {
+              case 0:
+                  console.log('0')
+                  basedy = 3
+                  basedx = 3
+                  dy = basedy * Math.random() + 1;
+                  dx = basedx * Math.random() + 1;
+              break;
+              case 1:
+                  console.log('1')
+                  basedy -3
+                  basedx = -3
+                  dy = basedy * Math.random() + 1;
+                  dx = basedx * Math.random() + 1;
+              break;
+              case 2:
+                  console.log('2')
+                  basedy = 3
+                  basedx = -3
+                  dy = basedy * Math.random() + 1;
+                  dx = basedx * Math.random() + 1;
+              break;
+              case 3:
+                  console.log('3')
+                  basedy = -3
+                  basedx = 3
+                  dy = basedy * Math.random() + 1;
+                  dx = basedx * Math.random() + 1;
+          }
+          gameStatus = "Active";
         } 
     });
     document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
