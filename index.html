@@ -139,11 +139,11 @@
         button1
         rect = button1
         ctx.fillStyle = "#000000";
-        ctx.fillRect(165, canvas.height / 2, 140, 40);
+        ctx.rect(165, canvas.height / 2, 140, 40);
+        ctx.fill(button1)
         ctx.fillStyle = "#808080";
         ctx.font = "20px Courier New";
         ctx.fillText("2 Players", 180, 185);
-        rect = null
       }
     }
     console.log("initialize game func");
