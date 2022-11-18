@@ -7,8 +7,8 @@
   <script>
     console.log("Define variables");
     //global variables
-    let canvas = document.getElementById("game");
-    let ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
     let dx = -3;
     let dy = 3;
     const basedy = 3;
@@ -19,15 +19,18 @@
     let paddle2Y = canvas.height / 2;
     let paddle2X = 450;
     let keyDown = null;
-    let gameStatus = "MainMenu";
+    let gameStatus = "mainmenu";
     let isGameOver = false;
-    let newDiv = document.createElement("div");
+    const newDiv = document.createElement("div");
     let mouseX = null;
     let mouseY = null;
-    let rect = null
-    console.log("before keydown");
-
-    console.log("after keydown");
+    let offsetX = null;
+    let offsetY = null;
+    let rect = null;
+    let debug = true;
+    let mouseDebug = false;
+    const button1 = new Path2D(); 
+    console.log('after define variables')
     // ----define functions----
     console.log("Define Functions");
 
@@ -134,16 +137,10 @@
       ctx.closePath();
     }
     function mainmenu() {
-      if (gameStatus == "MainMenu") {
-        const button1 = new Path2D()
-        button1
-        rect = button1
+      if (gameStatus == "mainmenu") {
+        button1.rect(165, canvas.height / 2, 140, 40);
         ctx.fillStyle = "#000000";
-        ctx.rect(165, canvas.height / 2, 140, 40);
-        ctx.fill(button1)
-        ctx.fillStyle = "#808080";
-        ctx.font = "20px Courier New";
-        ctx.fillText("2 Players", 180, 185);
+        ctx.fill(button1);
       }
     }
     console.log("initialize game func");
@@ -161,10 +158,16 @@
       const bounds = canvas.getBoundingClientRect();
       mouseX = event.clientX - bounds.left;
       mouseY = event.clientY - bounds.top;
-      console.log(`mouseX: ${mouseX} mouseY: ${mouseY}`);
+      offsetX = event.offsetX;
+      offsetY = event.offsetY;
+      if (mouseDebug == true) {
+        console.log(`mouseX: ${mouseX} mouseY: ${mouseY}`);
+        console.log(`offsetX: ${mouseX} offsetY: ${mouseY}`);
+      }
     }
-    canvas.addEventListener("click", ({ mouseX, mouseY }) => {
-        if (ctx.isPointInPath(rect, mouseX, mouseY)) {
+    canvas.addEventListener("click", ({ offsetX, offsetY }) => {
+        if (ctx.isPointInPath(button1, offsetX, offsetY)) {
+        console.log('ctx.isPointInPath(button1, offsetX, offsetY) == true');
         gameStatus = "Active";
     }});
     document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
@@ -172,7 +175,7 @@
       disableScroll();
       if (gameStatus == "Active") {
         ballMovement();
-      } else if (gameStatus == "MainMenu") {
+      } else if (gameStatus == "mainmenu") {
         mainmenu();
       }
       gameOver();
