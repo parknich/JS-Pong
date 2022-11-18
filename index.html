@@ -12,6 +12,7 @@
     let dx = -3;
     let dy = 3;
     const basedy = 3;
+    const basedx = -3
     let x = canvas.width / 2;
     let y = canvas.height - 30;
     let paddle1Y = canvas.height / 2;
@@ -19,7 +20,7 @@
     let paddle2Y = canvas.height / 2;
     let paddle2X = 450;
     let keyDown = null;
-    let gameStatus = "gameOver";
+    let gameStatus = "mainmenu";
     let isGameOver = false;
     const newDiv = document.createElement("div");
     let mouseX = null;
@@ -148,8 +149,12 @@
         ctx.fillStyle = "#000000";
         ctx.fillText("Game Over", 130, canvas.height / 2);
         ctx.fill();
+        ctx.font = "30px Georgia"
+        ctx.fillStyle = "white";
+        ctx.fillText('Retry', 194, 200);
+        ctx.fill();
         ctx.closePath();
-        buttonRetry.rect(165, 170, 140, 40);
+        buttonRetry.roundRect(181, 170, 100, 42, Math.PI * 3.5);
         ctx.fillStyle = "#000000";
         ctx.fill(buttonRetry);
       }
@@ -181,9 +186,11 @@
         if (ctx.isPointInPath(button2P, offsetX, offsetY) && gameStatus == 'mainmenu') {
           console.log('button2P clicked');
           gameStatus = "Active";
-        } else if (ctx.isPointInPath(buttonRetry) && gameStatus == 'gameOver') {
+        } else if (ctx.isPointInPath(buttonRetry, offsetX, offsetY) && gameStatus == 'gameOver') {
           console.log('buttonRetry clicked')
-          gameStatus == "Active";
+          gameStatus = "Active";
+          let randomStart = Math.floor(Math.random() * 4);
+          if (randomStart=)
         } 
     });
     document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
