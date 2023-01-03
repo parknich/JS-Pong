@@ -184,16 +184,16 @@
       
     }
     function AIPlayer() {
-      if ((!( y < paddle2Y) -5)) {
-        if (y > paddle2Y) {
+      if ((!( y < paddle2Y) +75)) {
+        if (y > paddle2Y + 35) {
           paddle2Y = paddle2Y + 5
           aiStatus = "Moving down |"
         } else if (y < paddle2Y + 30) {
           paddle2Y = paddle2Y - 5;
-          aiStatus = "Moving up |"
+          aiStatus = "Moving up   |"
         }
       } else {
-        aiStatus = "Standing still |"
+        aiStatus = "Sitting    |"
       }
       if (debug == true) {
       ctx.fillStyle = "#000000";
