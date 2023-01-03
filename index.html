@@ -129,17 +129,34 @@
       ctx.fill();
       ctx.closePath();
     }
-    function menu() {
+    function gameStatusMenu(){
       if (gameStatus == "mainmenu") {
-        ctx.fillStyle = "#000000";
-        button2P.rect(165, canvas.height / 2, 140, 40);
-        ctx.fill(button2P);  
         ctx.beginPath()
         ctx.fillStyle = "white";
-        ctx.font = "20px Courier New"
+        ctx.font = "50px Georgia";
+        ctx.fillText("Main Menu", 85, 120);
+        ctx.font = "60px Georgia"
+        ctx.fillText("Park's JS-Pong", 50, 70);
+        ctx.closePath()
+        ctx.fillStyle = "#000000"
+        button2P.rect(165, canvas.height / 2, 140, 40);
+        ctx.fill(button2P);  
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.font = "20px Courier New";
         ctx.fillText('2 Players', 179, 185);
         ctx.fill();
-        ctx.closePath()
+        ctx.closePath();
+        ctx.fillStyle = "#000000";
+        buttonAI.rect(150, canvas.height / 2 + 50, 173, 37);
+        ctx.fill(buttonAI);
+        ctx.beginPath();
+        ctx.font = "20px Courier New";
+        ctx.fillStyle = "white"
+        ctx.fillText('1 Player [AI]', 160, 235);
+        ctx.fill();
+        ctx.closePath();
+
       } else if (gameStatus == "mainmenu, AIDifficulty") {
         console.log('not done');
       } else if (gameStatus == "gameOver") {
@@ -226,7 +243,7 @@
     document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
     function Game() {
       disableScroll();
-      menu();
+      gameStatusMenu();
       if (gameStatus == "Active") {
         ballMovement();
         drawPaddle1();
