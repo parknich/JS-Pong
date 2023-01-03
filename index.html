@@ -12,7 +12,7 @@
     let dx = -3;
     let dy = 3;
     let basedy = 3;
-    let basedx = -3
+    let basedx = 3
     let x = canvas.width / 2;
     let y = canvas.height - 30;
     let paddle1Y = canvas.height / 2;
@@ -91,14 +91,22 @@
       drawBall();
     }
     function paddleCollision() {
+      let randomDir = Math.floor(Math.random() * 2);
       if (
         x > paddle1X &&
         x < paddle1X + 10 &&
         y > paddle1Y - 5 &&
         y < paddle1Y + 75
       ) {
-        dx = -dx;
-        dy = basedy * Math.random();
+        switch (randomDir) {
+          case 0: 
+          dx = -dx;
+          dy = -basedy * Math.random();
+          break;
+          case 1:
+            dx = -dx;
+            dy = basedy * Math.random();
+        }
         console.log("paddle1 collision");
       }
       if (
@@ -107,9 +115,16 @@
         y > paddle2Y - 5 &&
         y < paddle2Y + 75
       ) {
-        switch (randomdir) {}
-        dx = -dx;
-        dy = basedy * Math.random();
+        switch (randomDir) {
+          case 0: 
+          dx = -dx;
+          dy = -dy;
+          dy = basedy * Math.random();
+          break;
+          case 1:
+            dx = -dx;
+            dy = basedy * Math.random();
+        }
         console.log("paddle2 collision");
       }
     }
