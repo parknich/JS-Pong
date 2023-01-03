@@ -30,6 +30,8 @@
     let rect = null;
     let debug = true;
     let mouseDebug = false;
+    let aiTrue = true;
+    let aiStatus = null
     const button2P = new Path2D();
     const buttonAI = new Path2D();
     const buttonRetry = new Path2D();
@@ -49,11 +51,15 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       ctx.rect(x, y, 10, 10);
+      if (debug == true) {
       ctx.fillStyle = "#000000";
       ctx.font = "15px Courier New";
       ctx.fillText(`Ball X: ${x} Ball Y: ${y}`, 10, 20);
       ctx.fill();
       ctx.closePath();
+      } else {
+        ctx.closePath();
+      }
       x += dx;
       y += dy;
     }
@@ -113,10 +119,10 @@
       } else if (keyDown == "s") {
         paddle1Y = paddle1Y + 5;
         console.log(keyDown);
-      } else if (keyDown == "ArrowUp") {
+      } else if (keyDown == "ArrowUp" && gameStatus != "AIActive") {
         paddle2Y = paddle2Y - 5;
         console.log(keyDown);
-      } else if (keyDown == "ArrowDown") {
+      } else if (keyDown == "ArrowDown" && gameStatus != "AIActive") {
         paddle2Y = paddle2Y + 5;
       }
     }
@@ -133,11 +139,11 @@
       if (gameStatus == "mainmenu") {
         ctx.beginPath()
         ctx.fillStyle = "white";
-        ctx.font = "50px Georgia";
-        ctx.fillText("Main Menu", 85, 120);
+        ctx.font = "50px Garamond";
+        ctx.fillText("Main Menu", 115, 120);
         ctx.font = "60px Georgia"
-        ctx.fillText("Park's JS-Pong", 50, 70);
-        ctx.closePath()
+        ctx.fillText("Park's JS-Pong", 35, 70);
+        ctx.closePath();
         ctx.fillStyle = "#000000"
         button2P.rect(165, canvas.height / 2, 140, 40);
         ctx.fill(button2P);  
@@ -153,7 +159,7 @@
         ctx.beginPath();
         ctx.font = "20px Courier New";
         ctx.fillStyle = "white"
-        ctx.fillText('1 Player [AI]', 160, 235);
+        ctx.fillText('1 Player [AI] [WIP]', 160, 235);
         ctx.fill();
         ctx.closePath();
 
@@ -176,6 +182,26 @@
         ctx.fill(buttonRetry);
       }
       
+    }
+    function AIPlayer() {
+      if ((!( y < paddle2Y) -5)) {
+        if (y > paddle2Y) {
+          paddle2Y = paddle2Y + 5
+          aiStatus = "Moving down |"
+        } else if (y < paddle2Y + 30) {
+          paddle2Y = paddle2Y - 5;
+          aiStatus = "Moving up |"
+        }
+      } else {
+        aiStatus = "Standing still |"
+      }
+      if (debug == true) {
+      ctx.fillStyle = "#000000";
+      ctx.font = "15px Courier New";
+      ctx.fillText(`aiStatus: ${aiStatus} aiTrue: ${aiTrue} paddle2Y: ${paddle2Y}`, 10, 35);
+      ctx.fill();
+      ctx.closePath();
+      }
     }
     console.log("initialize game func");
     // the game
@@ -208,6 +234,7 @@
           let randomStart = Math.floor(Math.random() * 4);
           x = canvas.width/2
           y = canvas.height/2
+          paddle2Y = canvas.height/2
           switch (randomStart) {
               case 0:
                   console.log('0')
@@ -237,19 +264,31 @@
                   dx = dx;
                   dy = basedy * Math.random();
           }
-          gameStatus = "Active";
-        } 
+          if(aiTrue == true) {
+            gameStatus = "AIActive"
+          } else {
+            gameStatus = "Active"
+          }
+        } else if (ctx.isPointInPath(buttonAI, offsetX, offsetY) && gameStatus == "mainmenu") {
+            aiTrue = true
+            gameStatus = "AIActive"
+            aiStatus = "Loading AI"
+          }
+          
     });
     document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
     function Game() {
       disableScroll();
       gameStatusMenu();
-      if (gameStatus == "Active") {
+      if (gameStatus == "Active" || gameStatus == "AIActive") {
         ballMovement();
         drawPaddle1();
         drawPaddle2();
         paddleCollision();
         paddleMovement();
+      }
+      if (gameStatus == "AIActive") {
+        AIPlayer()
       }
       drawBackground();
       window.requestAnimationFrame(Game);
