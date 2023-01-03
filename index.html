@@ -94,7 +94,7 @@
       if (
         x > paddle1X &&
         x < paddle1X + 10 &&
-        y > paddle1Y &&
+        y > paddle1Y - 5 &&
         y < paddle1Y + 75
       ) {
         dx = -dx;
@@ -104,9 +104,10 @@
       if (
         x < paddle2X &&
         x > paddle2X - 10 &&
-        y > paddle2Y &&
+        y > paddle2Y - 5 &&
         y < paddle2Y + 75
       ) {
+        switch (randomdir) {}
         dx = -dx;
         dy = basedy * Math.random();
         console.log("paddle2 collision");
@@ -184,8 +185,8 @@
       
     }
     function AIPlayer() {
-      if ((!( y < paddle2Y) +75)) {
-        if (y > paddle2Y + 35) {
+      if ((( y > paddle2Y +70 ) || (y < paddle2Y))) {
+        if (y > paddle2Y + 30) {
           paddle2Y = paddle2Y + 5
           aiStatus = "Moving down |"
         } else if (y < paddle2Y + 30) {
@@ -193,7 +194,7 @@
           aiStatus = "Moving up   |"
         }
       } else {
-        aiStatus = "Sitting    |"
+        aiStatus = "Sitting     |"
       }
       if (debug == true) {
       ctx.fillStyle = "#000000";
