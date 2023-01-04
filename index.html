@@ -3,16 +3,19 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="game" width="480" height="320" style="z-index: 0"> </canvas>
+  <canvas id="game" width="480" height="320" style="z-index: 0"></canvas>
+  <canvas id="debugMenu" width="120" height="150" style="z-index: 1"></canvas>
   <script>
     console.log("Define variables");
     //global variables
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
+    const debugMenu = document.getElementById("debugMenu");
+    const debugctx = debugMenu.getContext("2d")
     let dx = -3;
     let dy = 3;
     let basedy = 3;
-    let basedx = 3
+    let basedx = 3;
     let x = canvas.width / 2;
     let y = canvas.height - 30;
     let paddle1Y = canvas.height / 2;
@@ -30,12 +33,18 @@
     let rect = null;
     let debug = true;
     let mouseDebug = false;
-    let aiTrue = true;
-    let aiStatus = null
+    let aiTrue = false;
+    let aiStatus = null;
+    let aiDifficulty = null;
+    let greenZone = null;
     const button2P = new Path2D();
     const buttonAI = new Path2D();
     const buttonRetry = new Path2D();
-    console.log('after define variables')
+    const buttonEasy = new Path2D();
+    const buttonHard = new Path2D();
+    const buttonImpossible = new Path2D();
+    const debugMenuDrag = new Path2D();
+    console.log("after define variables");
     // ----define functions----
     console.log("Define Functions");
 
@@ -52,11 +61,11 @@
       ctx.beginPath();
       ctx.rect(x, y, 10, 10);
       if (debug == true) {
-      ctx.fillStyle = "#000000";
-      ctx.font = "15px Courier New";
-      ctx.fillText(`Ball X: ${x} Ball Y: ${y}`, 10, 20);
-      ctx.fill();
-      ctx.closePath();
+        ctx.fillStyle = "#000000";
+        ctx.font = "15px Courier New";
+        ctx.fillText(`Ball X: ${x} Ball Y: ${y}`, 10, 20);
+        ctx.fill();
+        ctx.closePath();
       } else {
         ctx.closePath();
       }
@@ -99,10 +108,10 @@
         y < paddle1Y + 75
       ) {
         switch (randomDir) {
-          case 0: 
-          dx = -dx;
-          dy = -basedy * Math.random();
-          break;
+          case 0:
+            dx = -dx;
+            dy = -basedy * Math.random();
+            break;
           case 1:
             dx = -dx;
             dy = basedy * Math.random();
@@ -116,11 +125,11 @@
         y < paddle2Y + 75
       ) {
         switch (randomDir) {
-          case 0: 
-          dx = -dx;
-          dy = -dy;
-          dy = basedy * Math.random();
-          break;
+          case 0:
+            dx = -dx;
+            dy = -dy;
+            dy = basedy * Math.random();
+            break;
           case 1:
             dx = -dx;
             dy = basedy * Math.random();
@@ -151,22 +160,22 @@
       ctx.fill();
       ctx.closePath();
     }
-    function gameStatusMenu(){
+    function gameStatusMenu() {
       if (gameStatus == "mainmenu") {
-        ctx.beginPath()
+        ctx.beginPath();
         ctx.fillStyle = "white";
         ctx.font = "50px Garamond";
         ctx.fillText("Main Menu", 115, 120);
-        ctx.font = "60px Georgia"
+        ctx.font = "60px Georgia";
         ctx.fillText("Park's JS-Pong", 35, 70);
         ctx.closePath();
-        ctx.fillStyle = "#000000"
+        ctx.fillStyle = "#000000";
         button2P.rect(165, canvas.height / 2, 140, 40);
-        ctx.fill(button2P);  
+        ctx.fill(button2P);
         ctx.beginPath();
         ctx.fillStyle = "white";
         ctx.font = "20px Courier New";
-        ctx.fillText('2 Players', 179, 185);
+        ctx.fillText("2 Players", 179, 185);
         ctx.fill();
         ctx.closePath();
         ctx.fillStyle = "#000000";
@@ -174,13 +183,33 @@
         ctx.fill(buttonAI);
         ctx.beginPath();
         ctx.font = "20px Courier New";
-        ctx.fillStyle = "white"
-        ctx.fillText('1 Player [AI] [WIP]', 160, 235);
+        ctx.fillStyle = "white";
+        ctx.fillText("1 Player [AI] [WIP]", 160, 235);
         ctx.fill();
         ctx.closePath();
-
-      } else if (gameStatus == "mainmenu, AIDifficulty") {
-        console.log('not done');
+      } else if (gameStatus == "chooseDifficulty") {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.font = "45px Garamond";
+        ctx.fillText("Easy", 200, 150);
+        ctx.fillText("Hard", 195, 213);
+        ctx.fillText("Impossible", 150, 270);
+        console.log("text drawn");
+        ctx.font = "Bold 40px Garamond";
+        ctx.fillText("Choose AI Mode Difficulty", 10, 60);
+        ctx.fill();
+        console.log("filled");
+        ctx.closePath();
+        console.log("path closed");
+        ctx.fillStyle = "#000000";
+        buttonEasy.rect(176, 115, 130, 50);
+        ctx.fill(buttonEasy);
+        buttonHard.rect(176, 175, 130, 50);
+        ctx.fill(buttonHard);
+        buttonImpossible.rect(146, 231, 200, 50);
+        ctx.fill(buttonImpossible);
+        console.log("buttons actually drawn now");
       } else if (gameStatus == "gameOver") {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
@@ -188,35 +217,58 @@
         ctx.fillStyle = "#000000";
         ctx.fillText("Game Over", 130, canvas.height / 2);
         ctx.fill();
-        ctx.font = "30px Georgia"
+        ctx.font = "30px Georgia";
         ctx.fillStyle = "white";
-        ctx.fillText('Retry', 194, 200);
+        ctx.fillText("Retry", 194, 200);
         ctx.fill();
         ctx.closePath();
         buttonRetry.roundRect(181, 170, 100, 42, Math.PI * 3.5);
         ctx.fillStyle = "#000000";
         ctx.fill(buttonRetry);
       }
-      
     }
     function AIPlayer() {
-      if ((( y > paddle2Y +70 ) || (y < paddle2Y))) {
-        if (y > paddle2Y + 30) {
-          paddle2Y = paddle2Y + 5
-          aiStatus = "Moving down |"
-        } else if (y < paddle2Y + 30) {
-          paddle2Y = paddle2Y - 5;
-          aiStatus = "Moving up   |"
-        }
-      } else {
-        aiStatus = "Sitting     |"
-      }
+      if (gameStatus == "AIActive") {
+        if (y > paddle2Y + 70 || y < paddle2Y) {
+          if (y > paddle2Y + 20) {
+            if ((aiDifficulty == "Easy")) {
+              paddle2Y = paddle2Y + 1.5;
+              aiStatus = "Moving down |";
+            } else if ((aiDifficulty == "Hard")) {
+              basedx = -4;
+              basedy = 4;
+              paddle2Y = paddle2Y + 3;
+              aiStatus = "Moving down |";
+            } else if (aiDifficulty == "Impossible") {
+              paddle2Y = paddle2Y + 4
+              aiStatus = "Moving down |";
+            }
+          } else if (y < paddle2Y + 20) {
+            if ((aiDifficulty == "Easy")) {
+              paddle2Y = paddle2Y - 1.5;
+              aiStatus = "Moving up   |";
+            } else if ((aiDifficulty == "Hard")) {
+              paddle2Y = paddle2Y - 3;
+              aiStatus = "Moving up   |";
+            } else if(aiDifficulty == "Impossible") {
+              paddle2Y = paddle2Y - 4;
+              aiStatus = "Moving up   |";
+            }
+          } else {
+            aiStatus = "Sitting     |";
+          }
+        }}
       if (debug == true) {
-      ctx.fillStyle = "#000000";
-      ctx.font = "15px Courier New";
-      ctx.fillText(`aiStatus: ${aiStatus} aiTrue: ${aiTrue} paddle2Y: ${paddle2Y}`, 10, 35);
-      ctx.fill();
-      ctx.closePath();
+        ctx.fillStyle = "#000000";
+        ctx.font = "15px Courier New";
+        ctx.fillText(
+          `aiStatus: ${aiStatus} aiTrue: ${aiTrue} paddle2Y: ${paddle2Y}`,
+          10,
+          35
+        );
+        ctx.fillText(`aiDifficulty: ${aiDifficulty}`, 10, 50);
+        ctx.fill();
+        ctx.closePath();
       }
     }
     console.log("initialize game func");
@@ -228,7 +280,9 @@
         keyDown = null;
       }
     });
-    document.addEventListener("keyup", (event) => {keyDown = null;});
+    document.addEventListener("keyup", (event) => {
+      keyDown = null;
+    });
 
     function getCursorPosition(canvas, event) {
       const bounds = canvas.getBoundingClientRect();
@@ -242,57 +296,125 @@
       }
     }
     canvas.addEventListener("click", ({ offsetX, offsetY }) => {
-        if (ctx.isPointInPath(button2P, offsetX, offsetY) && gameStatus == 'mainmenu') {
-          console.log('button2P clicked');
+      if (
+        ctx.isPointInPath(button2P, offsetX, offsetY) &&
+        gameStatus == "mainmenu"
+      ) {
+        console.log("button2P clicked");
+        gameStatus = "Active";
+      } else if (
+        ctx.isPointInPath(buttonRetry, offsetX, offsetY) &&
+        gameStatus == "gameOver"
+      ) {
+        console.log("buttonRetry clicked");
+        let randomStart = Math.floor(Math.random() * 4);
+        x = canvas.width / 2;
+        y = canvas.height / 2;
+        paddle2Y = canvas.height / 2;
+        switch (randomStart) {
+          case 0:
+            console.log("0");
+            basedy = 3;
+            basedx = 3;
+            dx = dx;
+            dy = basedy * Math.random() - basedy;
+            break;
+          case 1:
+            console.log("1");
+            basedy - 3;
+            basedx = -3;
+            dx = -dx;
+            dy = basedy * Math.random() - basedy;
+            break;
+          case 2:
+            console.log("2");
+            basedy = 3;
+            basedx = -3;
+            dx = -dx;
+            dy = basedy * Math.random();
+            break;
+          case 3:
+            console.log("3");
+            basedy = -3;
+            basedx = 3;
+            dx = dx;
+            dy = basedy * Math.random();
+        }
+        if (aiTrue == true) {
+          gameStatus = "AIActive";
+        } else {
           gameStatus = "Active";
-        } else if (ctx.isPointInPath(buttonRetry, offsetX, offsetY) && gameStatus == 'gameOver') {
-          console.log('buttonRetry clicked')
-          let randomStart = Math.floor(Math.random() * 4);
-          x = canvas.width/2
-          y = canvas.height/2
-          paddle2Y = canvas.height/2
-          switch (randomStart) {
-              case 0:
-                  console.log('0')
-                  basedy = 3
-                  basedx = 3
-                  dx = dx;
-                  dy = basedy * Math.random() - basedy;
-              break;
-              case 1:
-                  console.log('1')
-                  basedy -3
-                  basedx = -3
-                  dx = -dx;
-                  dy = basedy * Math.random() - basedy;
-              break;
-              case 2:
-                  console.log('2')
-                  basedy = 3
-                  basedx = -3
-                  dx = -dx;
-                  dy = basedy * Math.random();
-              break;
-              case 3:
-                  console.log('3')
-                  basedy = -3
-                  basedx = 3
-                  dx = dx;
-                  dy = basedy * Math.random();
-          }
-          if(aiTrue == true) {
-            gameStatus = "AIActive"
-          } else {
-            gameStatus = "Active"
-          }
-        } else if (ctx.isPointInPath(buttonAI, offsetX, offsetY) && gameStatus == "mainmenu") {
-            aiTrue = true
-            gameStatus = "AIActive"
-            aiStatus = "Loading AI"
-          }
-          
+        }
+      } else if (
+        ctx.isPointInPath(buttonAI, offsetX, offsetY) &&
+        gameStatus == "mainmenu"
+      ) {
+        aiTrue = true;
+        gameStatus = "chooseDifficulty";
+        aiStatus = "Waiting for AI Difficulty |";
+      }
+      if (
+        ctx.isPointInPath(buttonEasy, offsetX, offsetY) &&
+        gameStatus == "chooseDifficulty"
+      ) {
+        aiStatus = "Difficulty chosen, processing... |";
+        aiDifficulty = "Easy";
+        aiTrue = true;
+        greenZone = "15"
+        gameStatus = "AIActive";
+        aiStatus = "Done processing, finishing up. |";
+      }
+      if (
+        ctx.isPointInPath(buttonHard, offsetX, offsetY) &&
+        gameStatus == "chooseDifficulty"
+      ) {
+        aiStatus = "Difficulty chosen, processing... |";
+        aiDifficulty = "Hard";
+        aiTrue = true;
+        greenZone = "20"
+        gameStatus = "AIActive";
+        aiStatus = "Done processing, finishing up. |";
+      }
+      if (
+        ctx.isPointInPath(buttonImpossible, offsetX, offsetY) &&
+        gameStatus == "chooseDifficulty"
+      ) {
+        aiStatus = "Difficulty chosen, processing... |";
+        aiDifficulty = "Impossible";
+        aiTrue = true;
+        greenZone = "30"
+        gameStatus = "AIActive";
+        aiStatus = "Done processing, finishing up. |";
+      }
     });
-    document.addEventListener("mousemove",(event)=>{getCursorPosition(canvas,event)});
+    function devdebugMenu() {
+      debugctx.beginPath();
+      
+      debugctx.font = "Bold 20px Courier New";
+      debugctx.fillStyle = "#393737"
+      debugMenuDrag.rect(0, 0, 120, 25)
+      debugctx.fill(debugMenuDrag)
+      debugctx.fillStyle = "white";
+      debugctx.fillText("DEBUG MENU", 0, 20);
+      debugctx.font = "Bold 13px Courier New";
+      debugctx.fillText(`gameStatus:`, 0, 40);
+      debugctx.fillText(`${gameStatus}`, 0, 55)
+      debugctx.fillText(`ai info:`, 0, 66);
+      debugctx.fillText(`${aiStatus}`, 0, 77)
+      debugctx.fillText(`${aiTrue}`, 0, 87)
+      debugctx.fillText(`diff: ${aiDifficulty}`, 0, 97)
+      debugctx.fillStyle = "#000000";
+      debugctx.globalAlpha = 0.3
+      debugctx.fillRect(0, 0, 120, 150);
+      debugctx.globalAlpha = 1
+      debugctx.fill();
+      debugctx.closePath();
+
+      console.log(`gameStatus: ${gameStatus}`);
+    }
+    document.addEventListener("mousemove", (event) => {
+      getCursorPosition(canvas, event);
+    });
     function Game() {
       disableScroll();
       gameStatusMenu();
@@ -304,9 +426,12 @@
         paddleMovement();
       }
       if (gameStatus == "AIActive") {
-        AIPlayer()
+        AIPlayer();
       }
-      drawBackground();
+      drawBackground()
+      if (debug == true) {
+        devdebugMenu()
+      }
       window.requestAnimationFrame(Game);
     }
     //----end define functions----
