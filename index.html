@@ -308,18 +308,6 @@
             aiStatus = "Sitting     |";
           }
         }}
-      if (debug == true) {
-        ctx.fillStyle = "#000000";
-        ctx.font = "15px Courier New";
-        ctx.fillText(
-          `aiStatus: ${aiStatus} aiTrue: ${aiTrue} paddle2Y: ${paddle2Y}`,
-          10,
-          35
-        );
-        ctx.fillText(`aiDifficulty: ${aiDifficulty}`, 10, 50);
-        ctx.fill();
-        ctx.closePath();
-      }
     }
     console.log("initialize game func");
     // the game
