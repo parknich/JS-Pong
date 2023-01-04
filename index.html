@@ -25,6 +25,8 @@
     let keyDown = null;
     let gameStatus = "mainmenu";
     let isGameOver = false;
+    let P1Score = 0
+    let P2Score = 0
     const newDiv = document.createElement("div");
     let mouseX = null;
     let mouseY = null;
@@ -54,6 +56,47 @@
 
     function enableScroll() {
       document.body.classList.remove("stop-scrolling");
+    }
+    function randomStart() {
+      let randomDir2 = Math.floor(Math.random() * 4);
+      x = canvas.width/2
+      y = canvas.height/2
+      switch (randomDir2) {
+          case 0:
+            console.log("0");
+            basedy = 3;
+            basedx = 3;
+            dx = dx;
+            dy = basedy * Math.random() - basedy;
+            break;
+          case 1:
+            console.log("1");
+            basedy - 3;
+            basedx = -3;
+            dx = -dx;
+            dy = basedy * Math.random() - basedy;
+            break;
+          case 2:
+            console.log("2");
+            basedy = 3;
+            basedx = -3;
+            dx = -dx;
+            dy = basedy * Math.random();
+            break;
+          case 3:
+            console.log("3");
+            basedy = -3;
+            basedx = 3;
+            dx = dx;
+            dy = basedy * Math.random();
+        }
+        paddle1Y = canvas.height/2
+        paddle2Y = canvas.height/2
+        if (aiTrue == true) {
+          gameStatus = "AIActive";
+        } else {
+          gameStatus = "Active";
+        }
     }
     //draw
     function drawBall() {
@@ -94,10 +137,16 @@
       if (y + dy > canvas.height - 10 || y + dy < 0) {
         dy = -dy;
       }
-      if (x + dx > canvas.width - 10 || x + dx < 0) {
-        gameStatus = "gameOver";
-      }
       drawBall();
+    }
+    function scoreSystem() {
+      if (x + dx < 0) {
+        P2Score = P2Score + 1
+        randomStart()
+      } else if (x + dx > canvas.width - 10 ) {
+        P1Score = P1Score + 1
+        randomStart()
+      }
     }
     function paddleCollision() {
       let randomDir = Math.floor(Math.random() * 2);
@@ -165,7 +214,7 @@
         ctx.beginPath();
         ctx.fillStyle = "white";
         ctx.font = "50px Garamond";
-        ctx.fillText("Main Menu", 115, 120);
+        ctx.fillText("Main Menu", 120, 120);
         ctx.font = "60px Georgia";
         ctx.fillText("Park's JS-Pong", 35, 70);
         ctx.closePath();
@@ -227,6 +276,7 @@
         ctx.fill(buttonRetry);
       }
     }
+
     function AIPlayer() {
       if (gameStatus == "AIActive") {
         if (y > paddle2Y + 70 || y < paddle2Y) {
@@ -307,44 +357,7 @@
         gameStatus == "gameOver"
       ) {
         console.log("buttonRetry clicked");
-        let randomStart = Math.floor(Math.random() * 4);
-        x = canvas.width / 2;
-        y = canvas.height / 2;
-        paddle2Y = canvas.height / 2;
-        switch (randomStart) {
-          case 0:
-            console.log("0");
-            basedy = 3;
-            basedx = 3;
-            dx = dx;
-            dy = basedy * Math.random() - basedy;
-            break;
-          case 1:
-            console.log("1");
-            basedy - 3;
-            basedx = -3;
-            dx = -dx;
-            dy = basedy * Math.random() - basedy;
-            break;
-          case 2:
-            console.log("2");
-            basedy = 3;
-            basedx = -3;
-            dx = -dx;
-            dy = basedy * Math.random();
-            break;
-          case 3:
-            console.log("3");
-            basedy = -3;
-            basedx = 3;
-            dx = dx;
-            dy = basedy * Math.random();
-        }
-        if (aiTrue == true) {
-          gameStatus = "AIActive";
-        } else {
-          gameStatus = "Active";
-        }
+        randomStart();
       } else if (
         ctx.isPointInPath(buttonAI, offsetX, offsetY) &&
         gameStatus == "mainmenu"
@@ -412,6 +425,15 @@
 
       console.log(`gameStatus: ${gameStatus}`);
     }
+    function pongUI() {
+      ctx.beginPath();
+      ctx.fillStyle = "white"
+      ctx.font = "40px Courier New"
+      if (gameStatus == "Active" || gameStatus == "AIActive") {
+        ctx.fillText(`${P1Score} - ${P2Score}`, 180, 40)
+      }
+      ctx.closePath();
+    }
     document.addEventListener("mousemove", (event) => {
       getCursorPosition(canvas, event);
     });
@@ -424,6 +446,8 @@
         drawPaddle2();
         paddleCollision();
         paddleMovement();
+        pongUI();
+        scoreSystem();
       }
       if (gameStatus == "AIActive") {
         AIPlayer();
@@ -432,6 +456,7 @@
       if (debug == true) {
         devdebugMenu()
       }
+      
       window.requestAnimationFrame(Game);
     }
     //----end define functions----
