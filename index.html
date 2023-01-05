@@ -24,6 +24,7 @@
     let paddle2X = 450;
     let keyDown = null;
     let gameStatus = "mainmenu";
+    let Active = false
     let isGameOver = false;
     let P1Score = 0
     let P2Score = 0
@@ -32,7 +33,6 @@
     let mouseY = null;
     let offsetX = null;
     let offsetY = null;
-    let rect = null;
     let debug = true;
     let mouseDebug = false;
     let aiTrue = false;
@@ -46,6 +46,7 @@
     const buttonHard = new Path2D();
     const buttonImpossible = new Path2D();
     const debugMenuDrag = new Path2D();
+    const menuButton = new Path2D();
     console.log("after define variables");
     // ----define functions----
     console.log("Define Functions");
@@ -97,8 +98,9 @@
         } else {
           gameStatus = "Active";
         }
+        Active = true;
     }
-    //draw
+    // draw
     function drawBall() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
@@ -187,16 +189,16 @@
       }
     }
     function paddleMovement() {
-      if (keyDown == "w") {
+      if (keyDown == "w" && ((paddle1Y >= 5) && (paddle1Y <= 475))) {
         paddle1Y = paddle1Y - 5;
         console.log(keyDown);
-      } else if (keyDown == "s") {
+      } else if (keyDown == "s" && ((paddle1Y >= 5) && (paddle1Y <= 475))) {
         paddle1Y = paddle1Y + 5;
         console.log(keyDown);
-      } else if (keyDown == "ArrowUp" && gameStatus != "AIActive") {
+      } else if ((keyDown == "ArrowUp") && (gameStatus != "AIActive") && ((paddle1Y >= 5) && (paddle1Y <= 475)))) {
         paddle2Y = paddle2Y - 5;
         console.log(keyDown);
-      } else if (keyDown == "ArrowDown" && gameStatus != "AIActive") {
+      } else if ((keyDown == "ArrowDown") && (gameStatus != "AIActive") && ((paddle1Y >= 5) && (paddle1Y <= 475))) {
         paddle2Y = paddle2Y + 5;
       }
     }
@@ -280,32 +282,32 @@
     function AIPlayer() {
       if (gameStatus == "AIActive") {
         if (y > paddle2Y + 70 || y < paddle2Y) {
-          if (y > paddle2Y + 20) {
+          if (y > paddle2Y + greenZone) {
             if ((aiDifficulty == "Easy")) {
               paddle2Y = paddle2Y + 1.5;
-              aiStatus = "Moving down |";
+              aiStatus = "Moving down";
             } else if ((aiDifficulty == "Hard")) {
               basedx = -4;
               basedy = 4;
               paddle2Y = paddle2Y + 3;
-              aiStatus = "Moving down |";
+              aiStatus = "Moving down";
             } else if (aiDifficulty == "Impossible") {
               paddle2Y = paddle2Y + 4
-              aiStatus = "Moving down |";
+              aiStatus = "Moving down";
             }
-          } else if (y < paddle2Y + 20) {
+          } else if (y < paddle2Y + greenZone) {
             if ((aiDifficulty == "Easy")) {
               paddle2Y = paddle2Y - 1.5;
-              aiStatus = "Moving up   |";
+              aiStatus = "Moving up";
             } else if ((aiDifficulty == "Hard")) {
               paddle2Y = paddle2Y - 3;
-              aiStatus = "Moving up   |";
+              aiStatus = "Moving up";
             } else if(aiDifficulty == "Impossible") {
               paddle2Y = paddle2Y - 4;
-              aiStatus = "Moving up   |";
+              aiStatus = "Moving up";
             }
           } else {
-            aiStatus = "Sitting     |";
+            aiStatus = "Sitting";
           }
         }}
     }
@@ -340,6 +342,7 @@
       ) {
         console.log("button2P clicked");
         gameStatus = "Active";
+        Active = true;
       } else if (
         ctx.isPointInPath(buttonRetry, offsetX, offsetY) &&
         gameStatus == "gameOver"
@@ -363,6 +366,7 @@
         aiTrue = true;
         greenZone = "15"
         gameStatus = "AIActive";
+        Active = true
         aiStatus = "Done processing, finishing up. |";
       }
       if (
@@ -374,6 +378,7 @@
         aiTrue = true;
         greenZone = "20"
         gameStatus = "AIActive";
+        Active = true
         aiStatus = "Done processing, finishing up. |";
       }
       if (
@@ -385,12 +390,19 @@
         aiTrue = true;
         greenZone = "30"
         gameStatus = "AIActive";
+        Active = true;
         aiStatus = "Done processing, finishing up. |";
+      }
+      if (
+        ctx.isPointInPath(menuButton, offsetX, offsetY) &&
+        Active == true
+      ) {
+        reInitialize()
       }
     });
     function devdebugMenu() {
       debugctx.beginPath();
-      
+
       debugctx.font = "Bold 20px Courier New";
       debugctx.fillStyle = "#393737"
       debugMenuDrag.rect(0, 0, 120, 25)
@@ -404,6 +416,7 @@
       debugctx.fillText(`${aiStatus}`, 0, 77)
       debugctx.fillText(`${aiTrue}`, 0, 87)
       debugctx.fillText(`diff: ${aiDifficulty}`, 0, 97)
+      debugctx.fillText(`Active?: ${Active}`, 0, 108)
       debugctx.fillStyle = "#000000";
       debugctx.globalAlpha = 0.3
       debugctx.fillRect(0, 0, 120, 150);
@@ -415,20 +428,39 @@
     }
     function pongUI() {
       ctx.beginPath();
-      ctx.fillStyle = "white"
-      ctx.font = "40px Courier New"
-      if (gameStatus == "Active" || gameStatus == "AIActive") {
-        ctx.fillText(`${P1Score} - ${P2Score}`, 180, 40)
-      }
+      ctx.fillStyle = "white";
+      ctx.font = "40px Courier New";
+      ctx.fillText(`${P1Score} - ${P2Score}`, 180, 40);
+      ctx.fillRect(440,10, 15, 2);
+      ctx.fillRect(440,15, 15, 2);
+      ctx.fillRect(440,20, 15, 2);
+      menuButton.rect(440, 10, 50, 10);
       ctx.closePath();
     }
     document.addEventListener("mousemove", (event) => {
       getCursorPosition(canvas, event);
     });
+
+    function reInitialize() {
+      basedx = -3
+      basedy = 3
+      dx = basedx
+      dy = basedy
+      paddle1Y = canvas.height/2
+      paddle2Y = canvas.height/2
+      x = canvas.width/2
+      y = canvas.height/2
+      aiTrue = false;
+      aiStatus = null;
+      Active = false;
+      gameStatus = "mainmenu";
+      P1Score = 0;
+      P2Score = 0;
+    }
     function Game() {
       disableScroll();
       gameStatusMenu();
-      if (gameStatus == "Active" || gameStatus == "AIActive") {
+      if (Active == true;) {
         ballMovement();
         drawPaddle1();
         drawPaddle2();
@@ -444,7 +476,7 @@
       if (debug == true) {
         devdebugMenu()
       }
-      
+
       window.requestAnimationFrame(Game);
     }
     //----end define functions----
