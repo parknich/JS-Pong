@@ -357,7 +357,7 @@
         gameStatus = "chooseDifficulty";
         aiStatus = "Waiting for AI Difficulty |";
       }
-      if (
+      else if (
         ctx.isPointInPath(buttonEasy, offsetX, offsetY) &&
         gameStatus == "chooseDifficulty"
       ) {
@@ -369,7 +369,7 @@
         Active = true
         aiStatus = "Done processing, finishing up. |";
       }
-      if (
+      else if (
         ctx.isPointInPath(buttonHard, offsetX, offsetY) &&
         gameStatus == "chooseDifficulty"
       ) {
@@ -381,7 +381,7 @@
         Active = true
         aiStatus = "Done processing, finishing up. |";
       }
-      if (
+      else if (
         ctx.isPointInPath(buttonImpossible, offsetX, offsetY) &&
         gameStatus == "chooseDifficulty"
       ) {
@@ -393,7 +393,7 @@
         Active = true;
         aiStatus = "Done processing, finishing up. |";
       }
-      if (
+      else if (
         ctx.isPointInPath(menuButton, offsetX, offsetY) &&
         Active == true
       ) {
@@ -418,9 +418,9 @@
       debugctx.fillText(`diff: ${aiDifficulty}`, 0, 97)
       debugctx.fillText(`Active?: ${Active}`, 0, 108)
       debugctx.fillStyle = "#000000";
-      debugctx.globalAlpha = 0.3
+      debugctx.globalAlpha = 0.3;
       debugctx.fillRect(0, 0, 120, 150);
-      debugctx.globalAlpha = 1
+      debugctx.globalAlpha = 1;
       debugctx.fill();
       debugctx.closePath();
 
